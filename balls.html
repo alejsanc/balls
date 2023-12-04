@@ -9,151 +9,147 @@
 
 <script>
     var context;
-	var balls = new Array();
-	var ballsNumber = 15;
+    var balls = new Array();
+    var ballsNumber = 15;
 				
-	document.addEventListener("DOMContentLoaded", function(){
-    	var canvas = document.getElementById("balls");
-		context = canvas.getContext("2d");
+    document.addEventListener("DOMContentLoaded", function(){
+        var canvas = document.getElementById("balls");
+        context = canvas.getContext("2d");
 
-    	for (x = 0; x < ballsNumber; x++) {
-			balls.push(new Ball());
-		}
+        for (x = 0; x < ballsNumber; x++) {
+            balls.push(new Ball());
+        }
 
-		moveBalls();
-	});
+        animation();
+    });
 
-	class Ball {
-		constructor() {
-   			this.x = Math.floor((Math.random() * 200) + 50);
-   			this.y = Math.floor((Math.random() * 200) + 150);
-			this.xDirection = Math.floor(Math.random() * 2);
-			this.yDirection = Math.floor(Math.random() * 2);
-			this.color = "#" + Math.floor(Math.random() * 16777216).toString(16);
-		}
-	}
+    class Ball {
+        constructor() {
+            this.x = Math.floor((Math.random() * 200) + 50);
+            this.y = Math.floor((Math.random() * 200) + 150);
+            this.xm = Math.floor(Math.random() * 2) == 0 ? -1 : 1;
+            this.ym = Math.floor(Math.random() * 2) == 0 ? -1 : 1;
+            this.color = "#" + Math.floor(Math.random() * 16777216).toString(16);
+        }
+    }
 
-	function drawScene() {
+    function drawScene() {
 	
-	    //Clear Scene
-	    context.clearRect(0, 0, 550, 550);
+        //Clear Scene
+        context.clearRect(0, 0, 550, 550);
 		
-		//Draw Square
-		context.beginPath(); 
-   		context.moveTo(0,0);
-		context.lineWidth = 10;
-		context.lineTo(550,0);
-		context.lineTo(550,550);
-		context.lineTo(0,550);
-		context.lineTo(0,0);
-		context.fillStyle = "white";
+        //Draw Square
+        context.beginPath(); 
+        context.moveTo(0,0);
+        context.lineWidth = 10;
+        context.lineTo(550,0);
+        context.lineTo(550,550);
+        context.lineTo(0,550);
+        context.lineTo(0,0);
+        context.fillStyle = "white";
         context.fill();
         context.strokeStyle = "green";
-		context.stroke();
+        context.stroke();
 
         //Draw Rectangles
         context.fillStyle = "green";
 
-		context.fillRect(50,100,100,25);
-		context.fillRect(300,150,100,25);
+        context.fillRect(50,100,100,25);
+        context.fillRect(300,150,100,25);
 
-		context.fillRect(100,400,100,25);
-		context.fillRect(350,355,100,25);
-	}
+        context.fillRect(100,400,100,25);
+        context.fillRect(350,355,100,25);
+    }
 
-	function drawBalls() {
+    function drawBalls() {
 	
-	    //Draw Balls
-		for (let ball of balls) {
-			context.beginPath();
-   			context.arc(ball.x, ball.y, 10, 0, 2 * Math.PI, false);
-   			context.fillStyle = ball.color;
-   			context.fill();
-   			context.lineWidth = 2;
-   			context.strokeStyle = "black";
-   			context.stroke();
-		}
-	}
+        //Draw Balls
+        for (let ball of balls) {
+            context.beginPath();
+            context.arc(ball.x, ball.y, 10, 0, 2 * Math.PI, false);
+            context.fillStyle = ball.color;
+            context.fill();
+            context.lineWidth = 2;
+            context.strokeStyle = "black";
+            context.stroke();
+        }
+    }
 
-	function checkCollisions() {
-		for (let ball of balls) {
+    function checkCollisions() {
+        for (let ball of balls) {
 		
-		    //Left
-			if (!isPixelWhite(ball.x-12, ball.y)) {
-				ball.xDirection = 1;
-			}
+            //Left
+            if (!isPixelWhite(ball.x-12, ball.y)) {
+                ball.xm = 1;
+            }
 
             //Right
-			if (!isPixelWhite(ball.x+11, ball.y)) {
-				ball.xDirection = 0;
-			}
+            if (!isPixelWhite(ball.x+11, ball.y)) {
+                ball.xm = -1;
+            }
 
             //Top
-			if (!isPixelWhite(ball.x, ball.y-12)) {
-                ball.yDirection = 1;
+            if (!isPixelWhite(ball.x, ball.y-12)) {
+                ball.ym = 1;
             }
 
             //Bottom
-			if (!isPixelWhite(ball.x, ball.y+11)) {
-				ball.yDirection = 0;
-			}
+            if (!isPixelWhite(ball.x, ball.y+11)) {
+                ball.ym = -1;
+            }
 
             //Left-Top
-			if (!isPixelWhite(ball.x-9, ball.y-9)) {
-				ball.xDirection = 1;
-				ball.yDirection = 1;
-			}
+            if (!isPixelWhite(ball.x-9, ball.y-9)) {
+                ball.xm = 1;
+                ball.ym = 1;
+            }
 
             //Right-Top
-			if (!isPixelWhite(ball.x+8, ball.y-9)) {
-				ball.xDirection = 0;
-				ball.yDirection = 1;
-			}
+            if (!isPixelWhite(ball.x+8, ball.y-9)) {
+                ball.xm = -1;
+                ball.ym = 1;
+            }
 
             //Left-Bottom
-			if (!isPixelWhite(ball.x-9, ball.y+8)) {
-				ball.xDirection = 1
-				ball.yDirection = 0;
-			}
+            if (!isPixelWhite(ball.x-9, ball.y+8)) {
+                ball.xm = 1
+                ball.ym = -1;
+            }
 
             //Right-Bottom
-			if (!isPixelWhite(ball.x+8, ball.y+8)) {
-				ball.xDirection = 0;
-				ball.yDirection = 0;
-			}
-		}
-	}
+            if (!isPixelWhite(ball.x+8, ball.y+8)) {
+                ball.xm = -1;
+                ball.ym = -1;
+            }
+        }
+    }
 	
-	function isPixelWhite(x, y) {
-		var data = context.getImageData(x, y, 1, 1).data;
-		return data[0] == 255 && data[1] == 255 && data[2] == 255;
-	}
-
-	function moveBalls() {
-			
-		drawScene();
-						
-		drawBalls();
-		
-		checkCollisions();
-			
-		for (let ball of balls) {
+    function isPixelWhite(x, y) {
+        var data = context.getImageData(x, y, 1, 1).data;
+        return data[0] == 255 && data[1] == 255 && data[2] == 255;
+    }
+	
+    function moveBalls() {
+	
+        for (let ball of balls) {
 				
-			if (ball.xDirection == 0) {
-				ball.x--;
-			} else {
-				ball.x++;
-			}
+            ball.x += ball.xm;
+            ball.y += ball.ym;	
+			
+        }
+    }
+	
+    function animation() {		
+        drawScene();
+						
+        drawBalls();
+		
+        checkCollisions();
+			
+        moveBalls();
 
-			if (ball.yDirection == 0) {
-				ball.y--;
-			} else {
-				ball.y++;
-			}
-		}
-
-		requestAnimationFrame(moveBalls);
-	}
+        requestAnimationFrame(animation);
+    }
 </script>
 </body>
 </html>
