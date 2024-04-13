@@ -100,27 +100,52 @@
 
             //Left-Top
             if (!isPixelWhite(ball.x-9, ball.y-9)) {
-                ball.xm = 1;
-                ball.ym = 1;
+                if (ball.xm == -1 && ball.ym == -1) {
+                    ball.xm = 1;
+                    ball.ym = 1;
+                } else {
+                    ball.xm += 1;
+                    ball.ym += 1;
+                }
             }
 
             //Right-Top
             if (!isPixelWhite(ball.x+8, ball.y-9)) {
-                ball.xm = -1;
-                ball.ym = 1;
+                if (ball.xm == 1 && ball.ym == -1) {
+                    ball.xm = -1;
+                    ball.ym = 1;
+                } else {
+                    ball.xm -= 1;
+                    ball.ym += 1;
+                }
             }
 
             //Left-Bottom
             if (!isPixelWhite(ball.x-9, ball.y+8)) {
-                ball.xm = 1
-                ball.ym = -1;
+                if (ball.xm == -1 && ball.ym == 1) {
+                    ball.xm = 1
+                    ball.ym = -1;
+                } else {
+                    ball.xm += 1;
+                    ball.ym -= 1;
+                }
             }
 
             //Right-Bottom
             if (!isPixelWhite(ball.x+8, ball.y+8)) {
-                ball.xm = -1;
-                ball.ym = -1;
+                if (ball.xm == 1 && ball.ym == 1) {
+                    ball.xm = -1;
+                    ball.ym = -1;
+                } else {
+                    ball.xm -= 1;
+                    ball.ym -= 1;
+                }
             }
+            
+            //Limit speed to 1 pixel/frame
+            ball.xm = Math.min(1, Math.max(-1, ball.xm));
+            ball.ym = Math.min(1, Math.max(-1, ball.ym));
+           
         }
     }
 	
